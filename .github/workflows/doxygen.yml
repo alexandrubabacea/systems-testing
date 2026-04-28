@@ -1,0 +1,27 @@
+name: Generate Doxygen Documentation
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install Doxygen
+      run: sudo apt-get update && sudo apt-get install -y doxygen
+      
+    - name: Run Doxygen
+      run: |
+        cd laboratories/cicd-documentation
+        doxygen Doxyfile
+        
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: doxygen-html-docs
+        path: laboratories/cicd-documentation/html/
